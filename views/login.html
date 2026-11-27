@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión — Access Tecnología</title>
+    <link rel="icon" type="image/jpeg" href="img/logo.jpeg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <style>
+        :root {
+            --primary: #6b0d25;
+            --primary-hover: #4d081a;
+            --primary-soft: rgba(107, 13, 37, 0.15);
+            --bg: #020617;
+            --surface: rgba(15, 23, 42, 0.75);
+            --surface-solid: #0f172a;
+            --text: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(158, 24, 60, 0.35);
+            --brand-light: #9e183c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .tech-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 50% 30%, rgba(107, 13, 37, 0.28) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(30, 41, 59, 0.35) 0%, transparent 50%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .tech-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(107,13,37,0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(158,24,60,0.08) 0%, transparent 50%);
+            animation: bgGlow 12s ease-in-out infinite;
+        }
+        @keyframes bgGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(3%, 3%) scale(1.05); }
+        }
+
+        .navbar-custom {
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+        .logo-img {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 16px rgba(107,13,37,0.35)) brightness(1.05);
+            transition: all .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .brand-logo-container:hover .logo-img {
+            transform: scale(1.08) rotate(-3deg);
+            filter: drop-shadow(0 8px 24px rgba(225,29,72,0.5)) brightness(1.1);
+        }
+        .brand-info { display: flex; flex-direction: column; }
+        .brand-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .brand-subtext {
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .server-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        .server-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 8px #10b981;
+        }
+        .server-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: #10b981;
+            opacity: 0.4;
+            animation: serverPulse 2s ease-out infinite;
+        }
+        @keyframes serverPulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 480px;
+            width: 100%;
+            margin: auto;
+            padding: 1rem;
+            animation: fadeUp 0.9s ease 0.15s both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card {
+            background: var(--surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.75rem 2.25rem;
+            position: relative;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.85);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            isolation: isolate;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: conic-gradient(from var(--angle), transparent 0%, transparent 78%, #6b0d25 88%, #fb7185 94%, #6b0d25 100%);
+            z-index: -2;
+            animation: rotateGlow 5s linear infinite;
+            opacity: 0.6;
+        }
+        .login-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: var(--surface);
+            z-index: -1;
+            backdrop-filter: blur(24px);
+        }
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        @keyframes rotateGlow {
+            to { --angle: 360deg; }
+        }
+        .login-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.9), 0 0 40px rgba(107, 13, 37, 0.2);
+        }
+
+        .card-top-light {
+            position: absolute;
+            top: -1px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--brand-light) 50%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .header-icon-wrap {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, var(--brand-light) 0%, var(--primary) 100%);
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 1.25rem auto;
+            font-size: 1.7rem;
+            color: #fff;
+            box-shadow: 0 12px 32px rgba(107, 13, 37, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 12px 32px rgba(107, 13, 37, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 16px 40px rgba(107, 13, 37, 0.7); }
+        }
+
+        .header-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+        .header-subtitle {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .field-group { margin-bottom: 1.25rem; }
+        .field-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .input-box {
+            display: flex;
+            align-items: center;
+            background: rgba(6, 10, 20, 0.8);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 0.2rem 1rem;
+            transition: all 0.3s ease;
+        }
+        .input-box:focus-within {
+            border-color: var(--brand-light);
+            box-shadow: 0 0 0 4px var(--primary-soft), 0 0 20px var(--primary-soft);
+            background: rgba(10, 15, 28, 0.95);
+        }
+        .input-box i.icon-field {
+            color: var(--muted);
+            font-size: 1.05rem;
+            margin-right: 0.85rem;
+            transition: color 0.3s ease;
+        }
+        .input-box:focus-within i.icon-field { color: var(--brand-light); }
+        .input-box input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 0.95rem;
+            padding: 0.85rem 0;
+            width: 100%;
+            outline: none;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        .input-box input::placeholder { color: #475569; }
+        .btn-eye {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0 0.25rem;
+            transition: color 0.2s ease;
+            font-size: 1rem;
+        }
+        .btn-eye:hover { color: #ffffff; }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--brand-light) 0%, var(--primary) 100%);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.95rem;
+            width: 100%;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 24px rgba(107, 13, 37, 0.45);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-submit:hover::after { left: 100%; }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 36px rgba(107, 13, 37, 0.6);
+            color: #ffffff;
+        }
+        .btn-submit:active { transform: translateY(-1px); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .alert-custom {
+            background: rgba(225, 29, 72, 0.12);
+            border: 1px solid rgba(225, 29, 72, 0.3);
+            color: #fecdd3;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            margin: 1.25rem 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        #googleBtn {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        #googleBtn iframe { border-radius: 50px !important; }
+
+        .footer-custom {
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            color: #64748b;
+            font-size: 0.78rem;
+        }
+
+        @media (max-width: 576px) {
+            .navbar-custom { padding: 1rem 1.25rem; }
+            .logo-img { height: 42px; }
+            .brand-name { font-size: 0.9rem; }
+            .brand-subtext { font-size: 0.65rem; }
+            .server-badge { display: none; }
+            .login-card { padding: 2rem 1.5rem; border-radius: 20px; }
+            .header-title { font-size: 1.5rem; }
+            .header-icon-wrap { width: 58px; height: 58px; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tech-bg"></div>
+
+    <header class="navbar-custom">
+        <a href="index.html" class="brand-logo-container">
+            <img src="img/logo.jpeg" alt="Access Tecnología" class="logo-img">
+            <div class="brand-info">
+                <span class="brand-name">Access Tecnología</span>
+                <span class="brand-subtext">Security & Control</span>
+            </div>
+        </a>
+        <div class="server-badge d-none d-sm-inline-flex">
+            <span class="server-dot"></span>
+            <span>Servidor activo</span>
+        </div>
+    </header>
+
+    <main class="main-wrapper">
+        <div class="login-card">
+            <div class="card-top-light"></div>
+
+            <div class="text-center mb-4">
+                <div class="header-icon-wrap">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h1 class="header-title">Acceso Administrativo</h1>
+                <p class="header-subtitle">Ingresa tus credenciales autorizadas</p>
+            </div>
+
+            <div id="error-alert" class="alert alert-custom py-3 px-3 mb-4 d-none">
+                <i class="fa-solid fa-triangle-exclamation fs-5"></i>
+                <div id="error-text">Correo o contraseña incorrectos.</div>
+            </div>
+
+            <form id="loginForm" onsubmit="realizarLogin(event)">
+                <div class="field-group">
+                    <label for="email" class="field-label">Correo Electrónico</label>
+                    <div class="input-box">
+                        <i class="fa-regular fa-envelope icon-field"></i>
+                        <input type="email" id="email" required autofocus placeholder="admin@access.com">
+                    </div>
+                </div>
+
+                <div class="field-group mb-4">
+                    <label for="password" class="field-label">Contraseña</label>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock icon-field"></i>
+                        <input type="password" id="password" required placeholder="••••••••">
+                        <button class="btn-eye" type="button" id="togglePassword" title="Mostrar/Ocultar contraseña">
+                            <i class="fa-regular fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit mb-3" id="btnLogin">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span id="btnLoginText">Iniciar Sesión</span>
+                </button>
+
+                <div class="divider">
+                    <span>o continúa con</span>
+                </div>
+
+                <div id="googleBtn"></div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-custom">
+        © 2026 Access Tecnología. Todos los derechos reservados.
+    </footer>
+
+    <script>
+        // Mostrar/Ocultar contraseña
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+        const eyeIcon = document.querySelector('#eyeIcon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // 🔑 FUNCIÓN CENTRAL: guardar toda la sesión incluyendo el TOKEN JWT
+        function guardarSesion(data) {
+            localStorage.setItem('admin_session', 'true');
+            localStorage.setItem('token', data.token || '');
+            localStorage.setItem('usuario_id', data.id || '');
+            localStorage.setItem('usuario', data.usuario || 'Usuario');
+            localStorage.setItem('usuario_email', data.email || '');
+            localStorage.setItem('rol', data.rol || 'vendedor');
+        }
+
+        // Mostrar error
+        function mostrarError(mensaje) {
+            const errorAlert = document.getElementById('error-alert');
+            const errorText = document.getElementById('error-text');
+            errorText.innerText = mensaje;
+            errorAlert.classList.remove('d-none');
+
+            // Efecto de sacudida (shake) cada vez que hay error
+            errorAlert.style.animation = 'none';
+            errorAlert.offsetHeight; /* trigger reflow */
+            errorAlert.style.animation = 'shake 0.4s ease';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const mensaje = sessionStorage.getItem('mensaje_expirado');
+            if (mensaje) {
+                mostrarError(mensaje);
+                sessionStorage.removeItem('mensaje_expirado');
+            }
+        });
+
+        // Loading en el botón
+        function setCargando(cargando) {
+            const btn = document.getElementById('btnLogin');
+            const texto = document.getElementById('btnLoginText');
+            btn.disabled = cargando;
+            texto.innerText = cargando ? 'Verificando...' : 'Iniciar Sesión';
+        }
+
+        // === LOGIN NORMAL ===
+        function realizarLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorAlert = document.getElementById('error-alert');
+
+            errorAlert.classList.add('d-none');
+            setCargando(true);
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(async res => {
+                const data = await res.json();
+                // Si el servidor responde con error (401, 429, etc)
+                if (!res.ok) {
+                    throw new Error(data.error || data.message || 'Error en el servidor');
+                }
+                return data;
+            })
+            .then(data => {
+                setCargando(false);
+                if (data.success) {
+                    guardarSesion({
+                        token: data.token,
+                        id: data.id,
+                        usuario: data.usuario,
+                        email: data.email,
+                        rol: data.rol
+                    });
+                    window.location.href = 'admin.html';
+                } else {
+                    mostrarError(data.error || 'Credenciales incorrectas');
+                }
+            })
+            .catch((err) => {
+                setCargando(false);
+                console.error(err);
+                // Aquí se mostrará el mensaje de bloqueo si el rate-limit saltó
+                mostrarError(err.message || 'Error de conexión con el servidor');
+            });
+        }
+
+        // === GOOGLE SIGN-IN ===
+        window.onload = function () {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: "62107681583-ebfckf4iuq0ocbgont2mg4votqp0k97i.apps.googleusercontent.com",
+                    callback: handleGoogleCredential
+                });
+
+                google.accounts.id.renderButton(
+                    document.getElementById("googleBtn"),
+                    { theme: "filled_black", size: "large", width: 320, text: "continue_with", shape: "pill" }
+                );
+            }
+        };
+
+        function handleGoogleCredential(response) {
+            const errorAlert = document.getElementById('error-alert');
+            errorAlert.classList.add('d-none');
+            setCargando(true);
+
+            fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential })
+            })
+            .then(async res => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || data.message || 'Error con Google');
+                }
+                return data;
+            })
+            .then(data => {
+                setCargando(false);
+                if (data.success) {
+                    guardarSesion({
+                        token: data.token,
+                        id: data.id,
+                        usuario: data.usuario,
+                        email: data.email,
+                        rol: data.rol
+                    });
+                    window.location.href = 'admin.html';
+                } else {
+                    mostrarError(data.error || 'Error con Google');
+                }
+            })
+            .catch((err) => {
+                setCargando(false);
+                console.error(err);
+                mostrarError(err.message || 'Error de conexión con Google');
+            });
+        }
+    </script>
+</body>
+</html>

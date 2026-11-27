@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotización Técnica — Access Tecnología</title>
+<link rel="icon" type="image/jpeg" href="img/logo.jpeg">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --brand-900:#2b040d;
+  --brand-800:#450716;
+  --brand-700:#6b0d25;
+  --brand-600:#8a1230;
+  --brand-500:#a3183c;
+  --brand-400:#c9304f;
+  --brand-tint:rgba(107,13,37,.07);
+  --brand-tint-2:rgba(107,13,37,.035);
+
+  --blue-700:#1d4ed8;
+  --blue-600:#2563eb;
+  --blue-500:#3b82f6;
+  --cyan-600:#0891b2;
+  --cyan-500:#06b6d4;
+
+  --ink-950:#05070f;
+  --ink-900:#0a0f1c;
+  --ink-800:#0f172a;
+  --ink-700:#1e293b;
+  --ink-600:#334155;
+  --ink-500:#475569;
+  --ink-400:#64748b;
+  --ink-300:#94a3b8;
+  --ink-200:#cbd5e1;
+  --ink-100:#e2e8f0;
+  --ink-50:#f1f5f9;
+
+  --bg:#f7f9fc;
+  --bg-alt:#eef2f8;
+  --surface:#ffffff;
+  --surface-2:#fcfdff;
+  --text:#080d18;
+  --text-2:#3d4a5f;
+  --muted:#6b7a90;
+  --border:rgba(9,14,26,.08);
+  --border-strong:rgba(9,14,26,.14);
+
+  --r-sm:12px;
+  --r-md:16px;
+  --r-lg:22px;
+  --r-xl:30px;
+  --r-2xl:40px;
+  --r-full:999px;
+
+  --sh-sm:0 1px 2px rgba(9,14,26,.05),0 3px 8px -2px rgba(9,14,26,.06);
+  --sh-md:0 4px 10px -3px rgba(9,14,26,.08),0 14px 30px -8px rgba(9,14,26,.10);
+  --sh-lg:0 10px 22px -8px rgba(9,14,26,.10),0 30px 60px -18px rgba(9,14,26,.16);
+  --sh-xl:0 18px 40px -12px rgba(9,14,26,.14),0 56px 110px -32px rgba(9,14,26,.26);
+  --sh-brand:0 6px 16px -6px rgba(107,13,37,.35),0 22px 48px -14px rgba(107,13,37,.32);
+  --sh-brand-lg:0 14px 34px -10px rgba(107,13,37,.45),0 40px 80px -20px rgba(107,13,37,.38);
+
+  --glass-strong:rgba(255,255,255,.88);
+
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-spring:cubic-bezier(.34,1.45,.5,1);
+  --e-smooth:cubic-bezier(.4,0,.2,1);
+}
+
+[data-theme="dark"]{
+  --brand-700:#f43f5e;
+  --brand-600:#fb7185;
+  --brand-500:#fda4af;
+  --brand-tint:rgba(244,63,94,.12);
+  --brand-tint-2:rgba(244,63,94,.06);
+
+  --blue-600:#38bdf8;
+  --blue-500:#7dd3fc;
+  --cyan-500:#22d3ee;
+
+  --bg:#04060d;
+  --bg-alt:#080c16;
+  --surface:#0b1120;
+  --surface-2:#0e1526;
+  --text:#f6f8fc;
+  --text-2:#c3cddd;
+  --muted:#8695ab;
+  --border:rgba(148,163,184,.11);
+  --border-strong:rgba(148,163,184,.22);
+
+  --sh-sm:0 2px 8px rgba(0,0,0,.4);
+  --sh-md:0 8px 24px -8px rgba(0,0,0,.6);
+  --sh-lg:0 20px 44px -14px rgba(0,0,0,.7);
+  --sh-xl:0 34px 80px -24px rgba(0,0,0,.8);
+  --sh-brand:0 6px 18px -6px rgba(244,63,94,.4),0 22px 50px -14px rgba(244,63,94,.3);
+  --sh-brand-lg:0 14px 36px -10px rgba(244,63,94,.5),0 40px 80px -20px rgba(244,63,94,.4);
+
+  --glass-strong:rgba(11,17,32,.86);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-feature-settings:'ss01','cv11','cv02','cv03';
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+  font-size:15.5px;
+  overflow-x:hidden;
+  transition:background .45s var(--e-smooth),color .45s var(--e-smooth);
+  min-height:100vh;
+  display:flex;flex-direction:column;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:'Plus Jakarta Sans','Inter',sans-serif;
+  letter-spacing:-.032em;
+  line-height:1.1;
+  font-weight:800;
+  color:var(--text);
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font-family:inherit}
+
+::selection{background:var(--brand-700);color:#fff}
+
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;border:3px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--brand-700)}
+
+/* ============================================================
+   FONDO AMBIENTAL GLOBAL
+   ============================================================ */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(1200px 700px at 8% -4%,   rgba(163,24,60,.14),  transparent 62%),
+    radial-gradient(1000px 680px at 100% 10%, rgba(37,99,235,.13),  transparent 60%),
+    radial-gradient(1100px 800px at 45% 108%, rgba(107,13,37,.10),  transparent 62%),
+    radial-gradient(760px 520px at 18% 68%,   rgba(37,99,235,.08),  transparent 60%),
+    radial-gradient(680px 480px at 92% 78%,   rgba(163,24,60,.08),  transparent 60%);
+  pointer-events:none;z-index:0;
+}
+[data-theme="dark"] body::before{
+  background:
+    radial-gradient(1200px 700px at 8% -4%,   rgba(244,63,94,.20),  transparent 62%),
+    radial-gradient(1000px 680px at 100% 10%, rgba(56,189,248,.18), transparent 60%),
+    radial-gradient(1100px 800px at 45% 108%, rgba(244,63,94,.13),  transparent 62%),
+    radial-gradient(760px 520px at 18% 68%,   rgba(56,189,248,.12), transparent 60%),
+    radial-gradient(680px 480px at 92% 78%,   rgba(244,63,94,.10),  transparent 60%);
+}
+
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;z-index:9990;
+  opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] body::after{opacity:.045}
+
+/* ============================================================
+   LOADER
+   ============================================================ */
+.page-loader{
+  position:fixed;inset:0;z-index:9999;
+  background:#04060d;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+  transition:opacity .7s var(--e-smooth),visibility .7s;
+}
+.page-loader.hidden{opacity:0;visibility:hidden}
+.loader-logo{
+  width:88px;height:88px;background:#fff;border-radius:26px;
+  display:grid;place-items:center;padding:12px;
+  box-shadow:0 30px 90px rgba(107,13,37,.6);
+  animation:loaderPulse 1.9s ease-in-out infinite;
+}
+.loader-logo img{width:100%;height:100%;object-fit:contain;border-radius:14px}
+@keyframes loaderPulse{
+  0%,100%{transform:scale(1);box-shadow:0 30px 90px rgba(107,13,37,.5)}
+  50%{transform:scale(1.05);box-shadow:0 42px 100px rgba(107,13,37,.8)}
+}
+.loader-bar{width:190px;height:2px;background:rgba(255,255,255,.09);border-radius:99px;overflow:hidden;position:relative}
+.loader-bar::after{
+  content:'';position:absolute;inset:0;width:38%;border-radius:99px;
+  background:linear-gradient(90deg,#6b0d25,#a3183c,#2563eb);
+  animation:loaderBar 1.35s var(--e-smooth) infinite;
+}
+@keyframes loaderBar{0%{transform:translateX(-100%)}100%{transform:translateX(360%)}}
+.loader-text{
+  font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.34);font-weight:600;
+}
+
+/* ============================================================
+   SCROLL PROGRESS
+   ============================================================ */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:2px;width:0;z-index:1100;
+  background:linear-gradient(90deg,#6b0d25,#a3183c 45%,#2563eb);
+  box-shadow:0 0 14px rgba(163,24,60,.55);
+  transition:width .09s linear;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.top{
+  background:var(--ink-950);
+  color:#8b99ad;
+  font-size:.78rem;font-weight:500;
+  padding:11px 0;
+  position:relative;z-index:3;
+  border-bottom:1px solid rgba(148,163,184,.07);
+  letter-spacing:.005em;
+}
+.top a{color:#c3cddd;text-decoration:none;transition:color .2s}
+.top a:hover{color:#fff}
+.top i{color:rgba(148,163,184,.5)}
+.top .sep{width:1px;height:12px;background:rgba(148,163,184,.18)}
+
+/* ============================================================
+   NAV (SIMPLIFICADO)
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:1000;
+  padding:15px 0;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  transition:padding .35s var(--e-smooth),background .35s,box-shadow .35s;
+}
+[data-theme="dark"] .nav{background:rgba(4,6,13,.68)}
+.nav.scrolled{
+  padding:9px 0;
+  background:var(--glass-strong);
+  box-shadow:0 1px 0 var(--border),0 10px 30px -14px rgba(9,14,26,.22);
+}
+[data-theme="dark"] .nav.scrolled{background:rgba(4,6,13,.94)}
+
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-img{
+  height:44px;width:auto;object-fit:contain;
+  filter:drop-shadow(0 4px 14px rgba(107,13,37,.16));
+  transition:transform .4s var(--e-spring),filter .4s;
+}
+.logo:hover .logo-img{transform:scale(1.05) rotate(-2deg)}
+[data-theme="dark"] .logo-img{filter:drop-shadow(0 4px 14px rgba(244,63,94,.3)) brightness(1.06)}
+
+.btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  box-shadow: var(--sh-sm);
+  transition: all .3s var(--e-spring);
+}
+.btn-back-home:hover {
+  background: var(--brand-tint-2);
+  color: var(--brand-700);
+  border-color: var(--brand-700);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-md);
+}
+.btn-back-home i { transition: transform .3s ease; }
+.btn-back-home:hover i { transform: translateX(-4px); }
+
+.theme-toggle{
+  width:40px;height:40px;border-radius:var(--r-sm);
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--text-2);
+  display:grid;place-items:center;cursor:pointer;
+  font-size:.92rem;
+  transition:all .3s var(--e-spring);
+  box-shadow: var(--sh-sm);
+}
+.theme-toggle:hover{
+  border-color:var(--brand-700);color:var(--brand-700);
+  transform:translateY(-2px);box-shadow:var(--sh-md);
+}
+
+/* ============================================================
+   HERO COTIZADOR
+   ============================================================ */
+.hero{
+  position:relative;z-index:1;
+  padding:104px 0 120px;
+  overflow:hidden;
+  background:#04060d;
+  isolation:isolate;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:-3;
+  background:url('img/cableado.jpg') center/cover no-repeat;
+  transform:scale(1.05);
+  opacity:.42;
+  filter:saturate(.85);
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(4,6,13,.94) 0%,rgba(24,8,15,.9) 48%,rgba(4,6,13,.96) 100%);
+}
+.hero-grid{
+  position:absolute;inset:0;z-index:-2;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:62px 62px;
+  mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000 20%,transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,#000 20%,transparent 78%);
+}
+.hero-orb{
+  position:absolute;border-radius:50%;filter:blur(90px);
+  pointer-events:none;z-index:-2;opacity:.55;
+}
+.hero-orb.a{width:620px;height:620px;top:-180px;left:-120px;background:radial-gradient(circle,rgba(163,24,60,.6),transparent 68%);animation:orbFloat 22s ease-in-out infinite}
+.hero-orb.b{width:560px;height:560px;bottom:-220px;right:-140px;background:radial-gradient(circle,rgba(37,99,235,.45),transparent 68%);animation:orbFloat 26s ease-in-out infinite reverse}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(3%,4%) scale(1.12)}
+}
+.hero::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:120px;z-index:0;
+  background:linear-gradient(to top,var(--bg),transparent);
+  pointer-events:none;
+}
+
+.hero-inner{position:relative;z-index:2}
+
+.hero-glass{
+  position:relative;
+  padding:48px 42px;
+  border-radius:var(--r-2xl);
+  isolation:isolate;
+  text-align:center;
+
+  background:
+    radial-gradient(140% 120% at 0% 0%,rgba(255,255,255,.16),transparent 55%),
+    linear-gradient(150deg,rgba(255,255,255,.10),rgba(255,255,255,.045));
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:
+    0 30px 80px -30px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.05),
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(255,255,255,.06);
+  animation:fadeUp 1s var(--e-out) .05s both;
+  transition:border-color .5s var(--e-out),box-shadow .5s var(--e-out);
+}
+.hero-glass::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(400px 260px at 100% 0%,rgba(163,24,60,.22),transparent 62%),
+    radial-gradient(360px 240px at 0% 100%,rgba(37,99,235,.16),transparent 62%);
+}
+.hero-glass::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  border-radius:inherit;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55) 30%,rgba(255,255,255,.55) 70%,transparent);
+}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 16px 8px 12px;
+  border-radius:var(--r-full);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:#fecdd3;font-size:.755rem;font-weight:600;
+  letter-spacing:.055em;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;background:#fb7185;
+  box-shadow:0 0 0 0 rgba(251,113,133,.7);
+  animation:dotPulse 2.4s ease-out infinite;
+}
+@keyframes dotPulse{
+  0%{box-shadow:0 0 0 0 rgba(251,113,133,.7)}
+  70%{box-shadow:0 0 0 9px rgba(251,113,133,0)}
+  100%{box-shadow:0 0 0 0 rgba(251,113,133,0)}
+}
+
+.hero h1{
+  font-size:clamp(2.1rem,4.4vw,3.35rem);
+  line-height:1.06;
+  letter-spacing:-.04em;
+  color:#fff;
+  font-weight:800;
+  margin-bottom:20px;
+  text-wrap:balance;
+}
+.hero h1 .serif{
+  background:linear-gradient(105deg,#fda4af,#fb7185 40%,#93c5fd);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  padding-right:.06em;
+}
+.hero-lead{
+  font-size:1.02rem;
+  line-height:1.7;
+  color:#c1cbdb;
+  margin-bottom:0;
+  font-weight:400;
+  max-width:620px;
+  margin-left:auto;margin-right:auto;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============================================================
+   COTIZADOR (Contenedor principal con Efecto Vidrio)
+   ============================================================ */
+#cotizador-section{
+  position:relative;
+  padding:0 0 100px;
+  z-index:5;
+  margin-top:-60px;
+}
+
+.cotizador-wrapper {
+  position:relative;overflow:hidden;
+  border-radius:24px;
+  /* EFECTO VIDRIO AQUÍ */
+  background:
+    radial-gradient(120% 100% at 0% 0%,   rgba(255,255,255,.6), transparent 58%),
+    radial-gradient(120% 100% at 100% 100%,rgba(255,255,255,.4), transparent 58%),
+    linear-gradient(155deg, rgba(255,255,255,.4), rgba(255,255,255,.1));
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow: 
+    0 32px 72px -20px rgba(15,23,42,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+[data-theme="dark"] .cotizador-wrapper {
+  background:
+    radial-gradient(120% 100% at 0% 0%,   rgba(20,28,48,.6), transparent 58%),
+    linear-gradient(155deg, rgba(20,28,48,.4), rgba(12,18,32,.2));
+  border-color: rgba(148,163,184,.16);
+  box-shadow: 0 20px 50px -15px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.cotizador-wrapper::before{
+  content:'';position:absolute;
+  left:0;top:24px;bottom:24px;width:4px;
+  border-radius:0 4px 4px 0;
+  background:linear-gradient(180deg,#6b0d25,#a3183c);
+  z-index: 10;
+}
+[data-theme="dark"] .cotizador-wrapper::before{
+  background:linear-gradient(180deg,#f43f5e,#fb7185);
+}
+
+/* Sidebar Interno Oscuro Sólido */
+.sidebar-info {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 44px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.sidebar-badge {
+  display: inline-block;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.sidebar-info h3 {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+.sidebar-info .subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.info-icon {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  transition: all .4s var(--e-spring);
+}
+.info-item:hover .info-icon {
+  background: linear-gradient(135deg, #6b0d25, #a3183c);
+  transform: scale(1.1) rotate(-6deg);
+  box-shadow: 0 10px 24px -6px rgba(163,24,60,.55);
+}
+.info-item h6 {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: #ffffff;
+}
+.info-item p {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Formulario */
+.form-area {
+  padding: 44px 40px;
+  /* Un tinte blanco muy leve para que se lea sobre el vidrio */
+  background: rgba(255, 255, 255, 0.4);
+}
+[data-theme="dark"] .form-area {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.form-section-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--brand-700);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.form-section-title::before {
+  content: '';
+  width: 22px; height: 3px;
+  background: var(--brand-700);
+  border-radius: 2px;
+  animation: labelLine 2s ease-in-out infinite;
+}
+@keyframes labelLine {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.4); }
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+/* CAJAS DE TEXTO SÓLIDAS (Para que resalten sobre el vidrio) */
+.form-control, .form-select {
+  border: 1px solid #cbd5e1; /* Borde sólido para contraste */
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.925rem;
+  color: var(--text);
+  background: #ffffff; /* Fondo blanco sólido */
+  transition: all .3s ease;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+[data-theme="dark"] .form-control, [data-theme="dark"] .form-select {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--brand-700);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px var(--brand-tint);
+  outline: none;
+}
+[data-theme="dark"] .form-control:focus, [data-theme="dark"] .form-select:focus {
+  background: #0f172a;
+}
+.form-control::placeholder { color: #94a3b8; }
+
+/* Botón Principal */
+.btn-brand-primary {
+  background: var(--brand-700);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 16px 32px;
+  border-radius: var(--r-sm);
+  border: none;
+  transition: all .35s var(--e-spring);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 24px -8px rgba(163,24,60,.45);
+}
+.btn-brand-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left .6s ease;
+}
+.btn-brand-primary:hover::after { left: 100%; }
+.btn-brand-primary:hover {
+  background: var(--brand-800);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -8px rgba(163,24,60,.55);
+}
+.btn-brand-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+[data-theme="dark"] .btn-brand-primary {
+  background: #e11d48;
+}
+
+/* Success Card */
+.success-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.1);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+[data-theme="dark"] .success-card {
+  background: #0f172a;
+}
+.success-icon-wrapper {
+  width: 70px; height: 70px;
+  background: var(--brand-tint);
+  color: var(--brand-700);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.25rem auto;
+  animation: successPulse 2s ease-in-out infinite;
+}
+@keyframes successPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(163,24,60,0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(163,24,60,0); }
+}
+.folio-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  color: var(--text);
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  margin: 0.75rem 0 1.25rem 0;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,.02);
+}
+[data-theme="dark"] .folio-badge {
+  background: rgba(0,0,0,.3);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: var(--r-sm);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text); font-weight: 600; font-size: 0.875rem;
+  text-decoration: none;
+  transition: all .32s var(--e-spring);
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  background: var(--brand-tint-2);
+  color: var(--brand-700);
+  border-color: var(--brand-700);
+}
+
+/* ============================================================
+   MODAL SEGUIMIENTO
+   ============================================================ */
+.modal-content {
+  border: none;
+  border-radius: 20px !important;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,.4) !important;
+}
+.modal-header-premium {
+  background: #0f172a;
+  color: #fff;
+  padding: 24px 28px;
+  border: none;
+  position: relative;
+}
+.modal-header-premium::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6b0d25, #a3183c, #2563eb);
+  background-size: 200% 100%;
+  animation: stripMove 4s linear infinite;
+}
+@keyframes stripMove {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+.modal-header-premium h5 {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+.modal-body {
+  padding: 30px 28px;
+}
+
+/* Caja de resultado del seguimiento — CORREGIDA PARA MODO OSCURO */
+.resultado-seguimiento {
+  background: #f8fafc;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .resultado-seguimiento {
+  background: var(--surface-2);
+  border-color: var(--border) !important;
+  color: var(--text);
+}
+[data-theme="dark"] .resultado-seguimiento .step-icon {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+[data-theme="dark"] .resultado-seguimiento hr {
+  border-color: var(--border);
+  opacity: 0.4;
+}
+
+/* Tracking Steps */
+.tracking-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 2rem 0 1rem 0;
+}
+.tracking-steps::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: var(--border);
+  z-index: 1;
+}
+.step-item {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  flex: 1;
+}
+.step-icon {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px auto;
+  font-size: 1rem;
+  border: 2px solid var(--border);
+  transition: all .4s var(--e-spring);
+}
+.step-item.active .step-icon {
+  background: var(--brand-700);
+  color: #fff;
+  border-color: var(--brand-700);
+  box-shadow: 0 0 0 6px var(--brand-tint);
+  transform: scale(1.1);
+}
+.step-item.completed .step-icon {
+  background: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.step-item.active .step-label { color: var(--brand-700); }
+.step-item.completed .step-label { color: #10b981; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  position:relative;z-index:1;margin-top:auto;
+  background:#04060d;
+  color:#8b99ad;
+  padding:64px 0 30px;
+  font-size:.87rem;
+}
+.footer::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#6b0d25,#a3183c,#2563eb,transparent);
+}
+.footer-logo-wrap{
+  display:inline-flex;align-items:center;
+  padding:9px 17px;border-radius:14px;
+  background:#fff;
+  box-shadow:0 10px 28px -8px rgba(0,0,0,.5);
+  transition:transform .35s var(--e-spring);
+  margin-bottom:20px;
+}
+.footer-logo-wrap:hover{transform:scale(1.04)}
+.footer-logo-wrap img{height:38px;width:auto;object-fit:contain}
+.footer h5{
+  color:#f1f5f9;font-size:.75rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:18px;font-family:'Inter',sans-serif;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:11px}
+.footer-links a{
+  color:#8b99ad;text-decoration:none;font-size:.87rem;
+  transition:color .25s,padding-left .3s var(--e-out);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.footer-links a:hover{color:#fff;padding-left:5px}
+.footer-links i{font-size:.62rem;opacity:.4}
+.footer p{color:#8b99ad;line-height:1.72}
+.footer-bottom{
+  margin-top:44px;padding-top:26px;
+  border-top:1px solid rgba(148,163,184,.12);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:14px;
+  font-size:.79rem;color:#5f6d82;
+}
+
+/* ============================================================
+   FLOATING ACTIONS
+   ============================================================ */
+.wa{
+  position:fixed;bottom:28px;right:28px;z-index:90;
+  width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;font-size:1.65rem;
+  background:#25d366;color:#fff;text-decoration:none;
+  border:3px solid rgba(255,255,255,.22);
+  box-shadow:0 14px 36px -8px rgba(37,211,102,.55);
+  transition:all .38s var(--e-spring);
+}
+.wa::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:#25d366;opacity:.5;z-index:-1;
+  animation:waPulse 2.6s ease-out infinite;
+}
+@keyframes waPulse{
+  0%{transform:scale(1);opacity:.5}
+  100%{transform:scale(1.65);opacity:0}
+}
+.wa:hover{transform:scale(1.12) rotate(-7deg);background:#1ebe57;color:#fff}
+
+.back-to-top{
+  position:fixed;bottom:28px;left:28px;z-index:90;
+  width:46px;height:46px;border-radius:50%;
+  border:none;cursor:pointer;font-size:.95rem;
+  background:var(--brand-700);color:#fff;
+  display:grid;place-items:center;
+  box-shadow:var(--sh-brand);
+  opacity:0;visibility:hidden;transform:translateY(18px);
+  transition:all .42s var(--e-spring);
+}
+.back-to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:hover{background:var(--brand-800);transform:translateY(-4px) scale(1.06)}
+[data-theme="dark"] .back-to-top:hover{background:var(--brand-600);color:#1a0410}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 991px) {
+  .hero { padding: 78px 0 100px; }
+  .hero-glass { padding: 36px 28px; }
+  #cotizador-section { margin-top: -40px; padding-bottom: 80px; }
+  .cotizador-wrapper { border-radius: 20px; }
+  
+  .sidebar-info { padding: 36px 28px; }
+  .form-area { padding: 32px 28px; }
+}
+@media (max-width: 576px) {
+  body { font-size: 15px; }
+  .hero { padding: 62px 0 80px; }
+  .hero h1 { font-size: clamp(1.85rem,7.5vw,2.4rem); }
+  .hero-lead { font-size: .98rem; }
+  .hero-glass { padding: 28px 22px; border-radius: var(--r-lg); }
+  
+  .sidebar-info, .form-area { padding: 24px 20px; }
+  .cotizador-wrapper { border-radius: 16px; }
+  .form-area { padding-top: 24px; }
+
+  .btn-back-home span { display: none; }
+  .btn-back-home { padding: 10px 14px; }
+  
+  .wa{bottom:88px;right:18px;width:52px;height:52px;font-size:1.45rem}
+  .back-to-top{bottom:20px;left:20px;width:42px;height:42px;font-size:.9rem}
+  
+  .footer{padding:52px 0 26px}
+  .footer-bottom{flex-direction:column;text-align:center}
+  
+  .tracking-steps::before { left: 5%; right: 5%; }
+  .step-icon { width: 38px; height: 38px; font-size: 0.85rem; }
+  .step-label { font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOADER ================= -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo"><img src="img/logo.jpeg" alt="Access Tecnología"></div>
+  <div class="loader-bar"></div>
+  <div class="loader-text">Cargando</div>
+</div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ================= TOP BAR ================= -->
+<div class="top">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="d-flex align-items-center gap-2">
+      <i class="fa-solid fa-location-dot"></i>
+      <span>Carretera Jilotepec-Corrales, km 7.5 · Jilotepec de Abasolo, Méx.</span>
+    </div>
+    <div class="d-flex align-items-center gap-3 gap-md-4">
+      <span class="d-none d-md-inline-flex align-items-center gap-2">
+        <i class="fa-regular fa-clock"></i>
+        <span>Lunes a Viernes</span>
+      </span>
+      <span class="sep d-none d-md-block"></span>
+      <a href="tel:5565198490" class="d-inline-flex align-items-center gap-2">
+        <i class="fa-solid fa-phone"></i> 55-65-19-84-90
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= NAV ================= -->
+<nav class="nav" id="mainNav">
+  <div class="container d-flex align-items-center justify-content-between">
+    <a href="/" class="logo">
+      <img src="img/logo.jpeg" alt="Access Tecnología" class="logo-img">
+    </a>
+
+    <div class="d-none d-lg-flex align-items-center gap-2">
+      <a href="/" class="btn-back-home">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Volver al Inicio</span>
+      </a>
+      <button type="button" class="btn-back-home" data-bs-toggle="modal" data-bs-target="#modalSeguimiento">
+        <i class="fa-solid fa-magnifying-glass-chart"></i>
+        <span>Rastrear mi Servicio</span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+
+    <!-- Mobile nav -->
+    <div class="d-flex align-items-center gap-2 d-lg-none">
+      <button class="theme-toggle" id="themeToggleMobile" aria-label="Cambiar tema">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="btn border-0 p-0" data-bs-toggle="collapse" data-bs-target="#navCorporate" aria-label="Menú">
+        <i class="fa-solid fa-bars fa-lg" style="color:var(--text)"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile collapse menu -->
+  <div class="collapse d-lg-none" id="navCorporate">
+    <div class="container py-3 d-flex flex-column gap-2">
+      <a class="btn-back-home justify-content-center" href="/">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Volver al Inicio</span>
+      </a>
+      <button type="button" class="btn-back-home justify-content-center" data-bs-toggle="modal" data-bs-target="#modalSeguimiento">
+        <i class="fa-solid fa-magnifying-glass-chart"></i>
+        <span>Rastrear mi Servicio</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orb a"></div>
+  <div class="hero-orb b"></div>
+
+  <div class="container hero-inner">
+    <div class="hero-glass">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        Cotización Técnica Profesional
+      </div>
+      <h1>
+        Solicita tu <span class="serif">cotización personalizada</span>
+      </h1>
+      <p class="hero-lead">
+        Completa tus datos técnicos y un especialista revisará tus requerimientos para ofrecerte la mejor solución en infraestructura, redes y telecomunicaciones.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FORMULARIO COTIZADOR ================= -->
+<section id="cotizador-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-11 col-xl-10">
+        
+        <div class="cotizador-wrapper">
+          <div class="row g-0">
+            
+            <!-- Columna Izquierda: Información (Fondo Oscuro Sólido) -->
+            <div class="col-lg-4 sidebar-info">
+              <div>
+                <span class="sidebar-badge">Atención Directa</span>
+                <h3>Solicita tu Cotización</h3>
+                <p class="subtitle">Completa tus datos técnicos y un especialista revisará tus requerimientos para ofrecerte la mejor solución.</p>
+
+                <div class="mt-4 pt-3">
+                  <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                      <h6>Garantía en Servicio</h6>
+                      <p>Soporte y diagnóstico confiable respaldado por ingenieros certificados.</p>
+                    </div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div>
+                      <h6>Respuesta Agilizada</h6>
+                      <p>Evaluación y tiempo de respuesta estimado en menos de 24 horas.</p>
+                    </div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-icon"><i class="fa-solid fa-headset"></i></div>
+                    <div>
+                      <h6>Asesoría Directa</h6>
+                      <p>¿Dudas inmediatas? Llámanos al 55-65-19-84-90.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+                <p class="small mb-0" style="color: #94a3b8;">
+                  <i class="fa-solid fa-building me-1"></i> Access Tecnología — Jilotepec, Méx.
+                </p>
+              </div>
+            </div>
+
+            <!-- Columna Derecha: Formulario (Fondo semi-transparente sobre vidrio) -->
+            <div class="col-lg-8 form-area">
+              
+              <form id="formCotizacion" novalidate>
+                
+                <!-- BLOQUE 1 -->
+                <span class="form-section-title"><i class="fa-regular fa-user me-1"></i> Datos del Solicitante</span>
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <label for="nombre_cliente" class="form-label">Nombre completo *</label>
+                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required placeholder="Ej. Juan Pérez">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="telefono" class="form-label">Teléfono / WhatsApp *</label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono" required placeholder="Ej. 5512345678">
+                  </div>
+                  <div class="col-12">
+                    <label for="email_cliente" class="form-label">Correo electrónico *</label>
+                    <input type="email" class="form-control" id="email_cliente" name="email_cliente" required placeholder="correo@ejemplo.com">
+                  </div>
+                </div>
+
+                <!-- BLOQUE 2 -->
+                <span class="form-section-title"><i class="fa-solid fa-sliders me-1"></i> Requerimiento Técnico</span>
+                <div class="row g-3 mb-4">
+                  <div class="col-md-6">
+                    <label for="tipo_servicio" class="form-label">Tipo de servicio *</label>
+                    <select class="form-select" id="tipo_servicio" name="tipo_servicio" required>
+                      <option value="" selected disabled>Seleccionar...</option>
+                      <option value="Soporte Técnico y Mantenimiento">Soporte Técnico y Mantenimiento</option>
+                      <option value="Instalación de Cámaras / CCTV">Instalación / Revisión de Cámaras (CCTV)</option>
+                      <option value="Redes y Cableado Estructurado">Redes y Cableado Estructurado</option>
+                      <option value="Control de Acceso y Seguridad">Control de Acceso y Seguridad</option>
+                      <option value="Otro Servicio Técnico">Otro Servicio Especializado</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="urgencia" class="form-label">Horario preferido para atención *</label>
+                    <select class="form-select" id="urgencia" name="urgencia" required>
+                      <option value="" selected disabled>Seleccionar...</option>
+                      <option value="Horario Laboral">Horario Laboral (Lunes a Viernes 9:00 - 17:00)</option>
+                      <option value="Fuera de Horario">Por la mañana</option>
+                      <option value="Fin de Semana">Por la tarde (Despues de las 3)</option>
+                      <option value="Indistinto">Cualquier horario</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="ubicacion" class="form-label">Ubicación del servicio *</label>
+                    <input type="text" class="form-control" id="ubicacion" name="ubicacion" required placeholder="Colonia, Municipio o referencia de lugar">
+                  </div>
+
+                  <div class="col-12">
+                    <label for="falla_detectada" class="form-label">Descripción del requerimiento o falla *</label>
+                    <textarea class="form-control" id="falla_detectada" name="falla_detectada" rows="3" required placeholder="Describe brevemente el problema, equipos involucrados o requerimiento..."></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="mensaje_adicional" class="form-label">Notas adicionales (Opcional)</label>
+                    <input type="text" class="form-control" id="mensaje_adicional" name="mensaje_adicional" placeholder="Ej. Color de la casa, color del portón, referencias, horarios, etc.">
+                  </div>
+                </div>
+
+                <!-- Botón de Envío -->
+                <div class="pt-2">
+                  <button type="submit" class="btn-brand-primary w-100" id="btnEnviar">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Enviar Solicitud de Cotización</span>
+                  </button>
+                </div>
+
+              </form>
+
+              <!-- Contenedor dinámico de respuesta -->
+              <div id="alertFeedback" class="mt-4 d-none"></div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODAL SEGUIMIENTO ================= -->
+<div class="modal fade" id="modalSeguimiento" tabindex="-1" aria-labelledby="modalSeguimientoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header modal-header-premium">
+        <h5 class="modal-title text-white" id="modalSeguimientoLabel">
+          <i class="fa-solid fa-chart-line me-2" style="color: #fb7185;"></i> Rastrear Estatus de Cotización
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small mb-4" style="color: var(--muted);">Ingresa tu número de folio (ID) y el correo electrónico con el que registraste tu solicitud para consultar su estatus en tiempo real.</p>
+        
+        <div class="row g-3 mb-4">
+          <div class="col-md-5">
+            <label for="consulta-folio" class="form-label">Número de Folio (ID)</label>
+            <input type="number" class="form-control" id="consulta-folio" placeholder="Ej. 20">
+          </div>
+          <div class="col-md-5">
+            <label for="consulta-email" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="consulta-email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn-brand-primary w-100" style="padding: 12px;" onclick="buscarCotizacionCliente()">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- CAJA CORREGIDA: sin fondo blanco forzado -->
+        <div id="resultado-seguimiento" class="d-none border rounded-3 p-4 resultado-seguimiento">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div>
+              <span class="badge mb-1" style="background: var(--brand-700); color: #fff;" id="res-folio-text">#--</span>
+              <h5 class="fw-bold mb-0" id="res-cliente" style="color: var(--text);">Nombre del Cliente</h5>
+            </div>
+            <div class="text-end">
+              <span class="small d-block" style="color: var(--muted);">Servicio solicitado:</span>
+              <strong id="res-servicio" style="color: var(--brand-700);">Servicio Técnico</strong>
+            </div>
+          </div>
+          <hr style="opacity: 0.2;">
+          
+          <div class="tracking-steps">
+            <div class="step-item" id="step-pendiente">
+              <div class="step-icon"><i class="fa-solid fa-file-circle-exclamation"></i></div>
+              <div class="step-label">Pendiente</div>
+            </div>
+            <div class="step-item" id="step-contactado">
+              <div class="step-icon"><i class="fa-solid fa-headset"></i></div>
+              <div class="step-label">Contactado</div>
+            </div>
+            <div class="step-item" id="step-enviada">
+              <div class="step-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+              <div class="step-label">Cotización Enviada</div>
+            </div>
+            <div class="step-item" id="step-cerrada">
+              <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="step-label">Completada</div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-3">
+            <small style="color: var(--muted);"><i class="fa-solid fa-clock-rotate-left me-1"></i> Actualizado en tiempo real (Fecha de registro: <span id="res-fecha">N/A</span>)</small>
+          </div>
+        </div>
+
+        <div id="alerta-no-encontrado" class="alert alert-warning d-none text-center mb-0 mt-3 border-0">
+          <i class="fa-solid fa-circle-exclamation me-1"></i> No se encontró ninguna solicitud activa con esos datos. Verifica tu folio y correo.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-logo-wrap">
+          <img src="img/logo.jpeg" alt="Access Tecnología">
+        </div>
+        <p class="mb-0" style="max-width:320px;">
+          Soluciones en ingeniería, telecomunicaciones y sistemas
+          para organizaciones en crecimiento.
+        </p>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <h5>Empresa</h5>
+        <ul class="footer-links">
+          <li><a href="/"><i class="fa-solid fa-chevron-right"></i> Inicio</a></li>
+          <li><a href="/#servicios"><i class="fa-solid fa-chevron-right"></i> Servicios</a></li>
+          <li><a href="/#por-que"><i class="fa-solid fa-chevron-right"></i> ¿Por qué nosotros?</a></li>
+          <li><a href="catalogo.html"><i class="fa-solid fa-chevron-right"></i> Catálogo</a></li>
+          <li><a href="/#ubicacion"><i class="fa-solid fa-chevron-right"></i> Ubicación</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-md-6 col-6">
+        <h5>Recursos</h5>
+        <ul class="footer-links">
+          <li><a href="cotizadora.html"><i class="fa-solid fa-chevron-right"></i> Cotizador</a></li>
+          <li><a href="/#ubicacion"><i class="fa-solid fa-chevron-right"></i> Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <h5>Contacto</h5>
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <i class="fa-solid fa-location-dot mt-1" style="color:var(--brand-700)"></i>
+          <span>Jilotepec de Abasolo, Estado de México</span>
+        </div>
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <i class="fa-solid fa-phone mt-1" style="color:var(--brand-700)"></i>
+          <span>Teléfono: 55-65-19-84-90</span>
+        </div>
+        <div class="d-flex align-items-start gap-3">
+          <i class="fa-regular fa-clock mt-1" style="color:var(--brand-700)"></i>
+          <span>Lun–Vie 9:00–17:00 · Sáb 9:00–13:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; Access Tecnología. Todos los derechos reservados.</div>
+      <div>Hecho en México · Jilotepec de Abasolo, Méx.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Botón Volver Arriba -->
+<button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- WhatsApp Flotante -->
+<a href="https://wa.me/525565198490?text=Hola,%20me%20gustaría%20solicitar%20información%20sobre%20sus%20servicios." class="wa" id="waBtn" target="_blank" title="Contactar por WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ============ LOADER ============ */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('pageLoader').classList.add('hidden');
+    }, 700);
+  });
+
+  /* ============ SCROLL PROGRESS + NAV ============ */
+  const scrollProgress = document.getElementById('scrollProgress');
+  const mainNav = document.getElementById('mainNav');
+  const backToTop = document.getElementById('backToTop');
+
+  function handleScroll() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const percent = (scrollTop / docHeight) * 100;
+    scrollProgress.style.width = percent + '%';
+
+    if (scrollTop > 50) mainNav.classList.add('scrolled');
+    else mainNav.classList.remove('scrolled');
+
+    if (scrollTop > 400) backToTop.classList.add('show');
+    else backToTop.classList.remove('show');
+  }
+  window.addEventListener('scroll', handleScroll);
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ============ THEME ============ */
+  const themeToggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleMobile')];
+  const html = document.documentElement;
+  function setTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeToggles.forEach(btn => {
+      if (btn) btn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+  }
+  setTheme(localStorage.getItem('theme') || 'light');
+  themeToggles.forEach(btn => {
+    if (btn) btn.addEventListener('click', () => setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+  });
+
+  /* ============ 1. ENVÍO DE COTIZACIÓN ============ */
+  document.getElementById('formCotizacion').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const alertBox = document.getElementById('alertFeedback');
+    const btnEnviar = document.getElementById('btnEnviar');
+    
+    if (!this.checkValidity()) {
+      e.stopPropagation();
+      this.classList.add('was-validated');
+      return;
+    }
+
+    btnEnviar.disabled = true;
+
+    // Limpiamos el correo antes de enviarlo
+    const emailValue = document.getElementById('email_cliente').value.trim().toLowerCase();
+
+    // NOTA: Agregamos 'email' y 'correo' además de 'email_cliente' para asegurar que el backend lo reciba
+    const cotizacionData = {
+      nombre_cliente: document.getElementById('nombre_cliente').value.trim(),
+      telefono: document.getElementById('telefono').value.trim(),
+      email_cliente: emailValue,
+      email: emailValue,
+      correo: emailValue,
+      tipo_servicio: document.getElementById('tipo_servicio').value,
+      falla_detectada: document.getElementById('falla_detectada').value.trim(),
+      ubicacion: document.getElementById('ubicacion').value.trim(),
+      urgencia: document.getElementById('urgencia').value,
+      mensaje: document.getElementById('mensaje_adicional').value.trim()
+    };
+
+    fetch('/api/guardar_cotizacion', {    
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cotizacionData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alertBox.innerHTML = `
+          <div class="success-card">
+            <div class="success-icon-wrapper">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <h4 class="fw-bold mb-1" style="color: var(--text);">¡Solicitud Registrada Exitosamente!</h4>
+            <p class="small mb-2" style="color: var(--muted);">Hemos recibido tu requerimiento técnico. Guarda tu número de folio para rastrear el estatus.</p>
+            <div class="folio-badge">
+              <i class="fa-solid fa-file-invoice me-1" style="color: var(--brand-700);"></i> Folio: <strong>#${data.id_cotizacion}</strong>
+            </div>
+            <div>
+              <button type="button" class="btn-ghost" onclick="document.getElementById('alertFeedback').classList.add('d-none')">
+                <i class="fa-solid fa-rotate-right"></i> Enviar otra solicitud
+              </button>
+            </div>
+          </div>
+        `;
+        alertBox.classList.remove('d-none');
+        this.reset();
+        this.classList.remove('was-validated');
+      } else {
+        throw new Error(data.message || 'Error al guardar');
+      }
+    })
+    .catch(error => {
+      alertBox.innerHTML = `
+        <div class="alert alert-danger border-0 shadow-sm rounded-3 p-3 text-center" style="background: rgba(220,53,69,.1); color: #dc3545;">
+          <i class="fa-solid fa-triangle-exclamation me-2"></i> 
+          <strong>Error:</strong> No se pudo registrar la información. Por favor, intenta de nuevo o contáctanos por WhatsApp.
+        </div>
+      `;
+      alertBox.classList.remove('d-none');
+    })
+    .finally(() => {
+      btnEnviar.disabled = false;
+    });
+  });
+
+  /* ============ 2. SEGUIMIENTO EN TIEMPO REAL ============ */
+  let folioBuscadoActual = null;
+  let emailBuscadoActual = null;
+
+  function buscarCotizacionCliente() {
+    folioBuscadoActual = document.getElementById('consulta-folio').value.trim();
+    emailBuscadoActual = document.getElementById('consulta-email').value.trim().toLowerCase();
+
+    if (!folioBuscadoActual || !emailBuscadoActual) {
+      alert('Por favor ingresa tu número de folio y tu correo electrónico.');
+      return;
+    }
+    ejecutarBusquedaYActualizar();
+  }
+
+  function ejecutarBusquedaYActualizar() {
+    const folioLimpio = String(folioBuscadoActual).replace('#', '').trim();
+    const emailLimpio = String(emailBuscadoActual).trim().toLowerCase();
+
+    fetch(`/api/rastrear_cotizacion?folio=${folioLimpio}&email=${encodeURIComponent(emailLimpio)}`)
+      .then(r => {
+        if (r.status === 404) return null;
+        if (!r.ok) throw new Error("Error en el servidor");
+        return r.json();
+      })
+      .then(c => {
+        const contenedorResultado = document.getElementById('resultado-seguimiento');
+        const alertaNoEncontrado = document.getElementById('alerta-no-encontrado');
+
+        if (!c || c.error) {
+          contenedorResultado.classList.add('d-none');
+          alertaNoEncontrado.classList.remove('d-none');
+          return;
+        }
+
+        alertaNoEncontrado.classList.add('d-none');
+        contenedorResultado.classList.remove('d-none');
+        
+        document.getElementById('res-folio-text').innerText = `#${c.id || c.id_cotizacion}`;
+        document.getElementById('res-cliente').innerText = c.nombre_cliente;
+        document.getElementById('res-servicio').innerText = c.tipo_servicio;
+        document.getElementById('res-fecha').innerText = c.fecha_registro ? new Date(c.fecha_registro).toLocaleString() : 'N/A';
+
+        const estatus = (c.estatus || c.estado || 'pendiente').toLowerCase();
+        const pasos = ['pendiente', 'contactado', 'enviada', 'cerrada'];
+        let alcanzado = true;
+
+        pasos.forEach(p => {
+          const elStep = document.getElementById(`step-${p}`);
+          if (!elStep) return;
+          elStep.className = 'step-item';
+          
+          if (estatus === p) {
+            elStep.classList.add('active');
+            alcanzado = false;
+          } else if (alcanzado) {
+            elStep.classList.add('completed');
+          }
+        });
+      })
+      .catch(err => {
+        console.error("Error al buscar cotización:", err);
+        document.getElementById('resultado-seguimiento').classList.add('d-none');
+        document.getElementById('alerta-no-encontrado').classList.remove('d-none');
+      });
+  }
+
+  setInterval(() => {
+    const modalElement = document.getElementById('modalSeguimiento');
+    if (modalElement.classList.contains('show') && folioBuscadoActual && emailBuscadoActual) {
+      ejecutarBusquedaYActualizar();
+    }
+  }, 5000);
+
+  // Actualizar botón de WhatsApp dinámicamente
+  fetch('/api/configuracion')
+    .then(r => r.json())
+    .then(config => {
+      if (config.contacto_whatsapp) {
+        const msg = encodeURIComponent('Hola, me gustaría solicitar información sobre sus servicios.');
+        document.getElementById('waBtn').href = `https://wa.me/${config.contacto_whatsapp}?text=${msg}`;
+      }
+    });
+</script>
+</body>
+</html>
