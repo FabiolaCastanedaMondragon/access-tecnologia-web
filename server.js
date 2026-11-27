@@ -14,12 +14,13 @@ const compression = require('compression');
 require('dotenv').config();
 
 const app = express();
+
 // Configuración de Helmet para permitir imágenes y CDNs externos
 app.use(helmet({
-    contentSecurityPolicy: false, // Desactiva el bloqueo de scripts externos
-    crossOriginEmbedderPolicy: false, // Permite recursos de otros dominios
-    crossOriginOpenerPolicy: false, // 👈 ESTO ES LO QUE BLOQUEA EL POPUP DE GOOGLE
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 app.use(compression());
 app.use(cors());
@@ -33,9 +34,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ============================================================
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-    console.error('❌ ERROR CRÍTICO: JWT_SECRET no está configurado en el .env');
+    console.error('❌ ERROR CRÍTICO: JWT_SECRET no está configurado en el entorno o .env');
     console.error('   Ejecuta: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"');
-    console.error('   Y pega el resultado en el archivo .env como JWT_SECRET=...');
     process.exit(1);
 }
 const JWT_EXPIRES = '7d';
@@ -45,21 +45,29 @@ console.log('🔐 Servidor con JWT + bcrypt + rate limiting');
 
 const client = new OAuth2Client('62107681583-ebfckf4iuq0ocbgont2mg4votqp0k97i.apps.googleusercontent.com');
 
-// === Base de datos ===
+// ============================================================
+// === BASE DE DATOS (RAILWAY + RESPALDO LOCAL) ===
+// ============================================================
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'access_tecnologia',
-    port: 3307
+    host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+    user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+    password: process.env.MYSQLPASSWORD ?? process.env.DB_PASSWORD ?? '',
+    database: process.env.MYSQLDATABASE || process.env.DB_NAME || 'access_tecnologia',
+    port: Number(process.env.MYSQLPORT || process.env.DB_PORT || 3307)
 });
 
 db.connect(err => {
-    if (err) console.error('❌ Error al conectar a MySQL:', err);
-    else console.log('✅ Conectado a la BD access_tecnologia');
+    if (err) {
+        console.error('❌ Error al conectar a MySQL:', err);
+    } else {
+        const bdActiva = process.env.MYSQLDATABASE || process.env.DB_NAME || 'access_tecnologia';
+        console.log(`✅ Conectado a la BD ${bdActiva}`);
+    }
 });
 
-// === Multer ===
+// ============================================================
+// === MULTER ===
+// ============================================================
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -216,7 +224,6 @@ app.get('/register', (req, res) => res.redirect('/login.html'));
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'views', 'admin.html')));
 app.get('/catalogo', (req, res) => res.sendFile(path.join(__dirname, 'views', 'catalogo.html')));
 app.get('/cotizar', (req, res) => res.sendFile(path.join(__dirname, 'views', 'cotizadora.html')));
-
 app.get('/servicio', (req, res) => res.sendFile(path.join(__dirname, 'views', 'servicio.html')));
 
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'views', 'index.html')));
@@ -394,22 +401,22 @@ app.post('/api/guardar_cotizacion', async (req, res) => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        messaging_product: "whatsapp",
+                        messaging_product: 'whatsapp',
                         to: telefonoDestino,
-                        type: "template",
+                        type: 'template',
                         template: {
-                            name: "resumen_cotizacion",
-                            language: { code: "es" },
+                            name: 'resumen_cotizacion',
+                            language: { code: 'es' },
                             components: [{
-                                type: "body",
+                                type: 'body',
                                 parameters: [
-                                    { type: "text", text: String(idCotizacion) },
-                                    { type: "text", text: String(nombre_cliente || 'N/A') },
-                                    { type: "text", text: String(telefono || 'N/A') },
-                                    { type: "text", text: String(tipo_servicio || 'N/A') },
-                                    { type: "text", text: String(urgencia || 'Normal') },
-                                    { type: "text", text: String(ubicacion || 'No especificada') },
-                                    { type: "text", text: String(mensaje || 'Sin observaciones') }
+                                    { type: 'text', text: String(idCotizacion) },
+                                    { type: 'text', text: String(nombre_cliente || 'N/A') },
+                                    { type: 'text', text: String(telefono || 'N/A') },
+                                    { type: 'text', text: String(tipo_servicio || 'N/A') },
+                                    { type: 'text', text: String(urgencia || 'Normal') },
+                                    { type: 'text', text: String(ubicacion || 'No especificada') },
+                                    { type: 'text', text: String(mensaje || 'Sin observaciones') }
                                 ]
                             }]
                         }
@@ -428,12 +435,12 @@ app.post('/api/guardar_cotizacion', async (req, res) => {
                     console.log('   Contacto WA:', datosRespuesta.contacts?.[0]?.wa_id);
                 }
             } else {
-                console.warn('⚠️ [WhatsApp] Faltan variables en el .env, no se envió el mensaje');
+                console.warn('⚠️ [WhatsApp] Faltan variables en el entorno, no se envió el mensaje');
             }
-            console.log(''); // Línea vacía de separación
+            console.log('');
         } catch (errorWhatsApp) {
             console.error('❌ [WhatsApp] Error de red:', errorWhatsApp.message);
-            console.error(''); // Línea vacía de separación
+            console.error('');
         }
 
         res.json({ status: 'success', id_cotizacion: idCotizacion });
@@ -471,7 +478,7 @@ app.get('/api/cotizaciones', verificarToken, (req, res) => {
 app.put('/api/cotizaciones/:id', verificarToken, (req, res) => {
     const { estatus } = req.body;
     const usuarioReal = req.usuario.nombre;
-    const idUsuarioReal = req.usuario.id; // Aquí guardamos tu ID
+    const idUsuarioReal = req.usuario.id;
 
     db.query('SELECT * FROM cotizaciones WHERE id = ?', [req.params.id], (err, results) => {
         if (err) return res.status(500).json(err);
@@ -479,7 +486,6 @@ app.put('/api/cotizaciones/:id', verificarToken, (req, res) => {
         const anterior = results[0];
         const diff = obtenerDiferencias({ estatus: anterior.estatus || anterior.estado }, { estatus });
 
-        // Aquí agregamos el id_usuario al UPDATE para que se guarde en la base de datos
         db.query('UPDATE cotizaciones SET estatus = ?, id_usuario = ? WHERE id = ?', [estatus, idUsuarioReal, req.params.id], (err2) => {
             if (err2) return res.status(500).json(err2);
             registrarAuditoria('cotizaciones', req.params.id, 'actualizar', usuarioReal, diff.anteriores, diff.nuevos);
@@ -571,7 +577,6 @@ app.get('/api/productos', (req, res) => {
 
 app.post('/api/productos', verificarToken, adminOVendedor, (req, res) => {
     const { nombre_producto, descripcion, precio, stock, imagen } = req.body;
-    // 🛡️ Validación de seguridad en el backend
     if (!nombre_producto || nombre_producto.trim() === '') {
         return res.status(400).json({ error: 'El nombre del producto es obligatorio.' });
     }
@@ -594,7 +599,6 @@ app.post('/api/productos', verificarToken, adminOVendedor, (req, res) => {
 
 app.put('/api/productos/:id', verificarToken, adminOVendedor, (req, res) => {
     const { nombre_producto, descripcion, precio, stock, imagen } = req.body;
-    // 🛡️ Validación de seguridad en el backend
     if (!nombre_producto || nombre_producto.trim() === '') {
         return res.status(400).json({ error: 'El nombre del producto es obligatorio.' });
     }
@@ -743,12 +747,13 @@ app.put('/api/usuarios/:id', verificarToken, (req, res) => {
                 params = [nombre, email, rolFinal, id];
             }
 
+            const diff = obtenerDiferencias(
+                { nombre: anterior.nombre, email: anterior.email, rol: anterior.rol },
+                { nombre, email, rol: rolFinal }
+            );
+
             db.query(query, params, (err3) => {
                 if (err3) return res.status(500).json(err3);
-                const camposAnt = { nombre: anterior.nombre, email: anterior.email, rol: anterior.rol };
-                const camposNue = { nombre, email, rol: rolFinal };
-                if (cambioPass) camposNue.password = '***';
-                const diff = obtenerDiferencias(camposAnt, camposNue);
                 registrarAuditoria('usuarios', id, 'actualizar', req.usuario.nombre, diff.anteriores, diff.nuevos);
                 res.json({ success: true });
             });
@@ -758,28 +763,12 @@ app.put('/api/usuarios/:id', verificarToken, (req, res) => {
 
 app.delete('/api/usuarios/:id', verificarToken, soloAdmin, (req, res) => {
     if (String(req.params.id) === String(req.usuario.id)) {
-        return res.status(400).json({ error: 'No puedes eliminarte a ti mismo' });
+        return res.status(400).json({ error: 'No puedes eliminar tu propia cuenta.' });
     }
-
-    const idUsuario = req.params.id;
-
-    // Verificamos si el usuario tiene cotizaciones asignadas
-    db.query('SELECT COUNT(*) AS total FROM cotizaciones WHERE id_usuario = ?', [idUsuario], (err, results) => {
+    db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json(err);
-
-        // Si tiene cotizaciones, bloqueamos la eliminación
-        if (results[0].total > 0) {
-            return res.status(400).json({
-                error: 'No se puede eliminar el usuario porque tiene cotizaciones asignadas.'
-            });
-        }
-
-        // Si no tiene cotizaciones, procedemos a eliminar
-        db.query('DELETE FROM usuarios WHERE id = ?', [idUsuario], (err2) => {
-            if (err2) return res.status(500).json(err2);
-            registrarAuditoria('usuarios', idUsuario, 'eliminar', req.usuario.nombre, null, null);
-            res.json({ success: true });
-        });
+        registrarAuditoria('usuarios', req.params.id, 'eliminar', req.usuario.nombre, null, null);
+        res.json({ success: true });
     });
 });
 
@@ -787,51 +776,50 @@ app.delete('/api/usuarios/:id', verificarToken, soloAdmin, (req, res) => {
 // === AUDITORÍA Y CONFIGURACIÓN ===
 // ============================================================
 app.get('/api/auditoria', verificarToken, soloAdmin, (req, res) => {
-    db.query('SELECT * FROM auditoria ORDER BY id DESC', (err, results) => {
+    db.query('SELECT * FROM auditoria ORDER BY id DESC LIMIT 200', (err, results) => {
         if (err) return res.status(500).json(err);
         res.json(results);
     });
 });
 
 app.get('/api/configuracion', (req, res) => {
-    db.query('SELECT clave, valor FROM configuracion', (err, results) => {
+    db.query('SELECT * FROM configuracion LIMIT 1', (err, results) => {
         if (err) return res.status(500).json(err);
-        const config = {};
-        results.forEach(r => config[r.clave] = r.valor);
-        res.json(config);
+        res.json(results[0] || {});
     });
 });
 
 app.post('/api/configuracion', verificarToken, soloAdmin, (req, res) => {
-    const config = req.body;
-    const claves = Object.keys(config);
-    if (claves.length === 0) return res.status(400).json({ error: 'Sin datos' });
-
-    const queries = claves.map(clave => new Promise((resolve, reject) => {
-        db.query(
-            'INSERT INTO configuracion (clave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = ?',
-            [clave, config[clave], config[clave]],
-            (err) => err ? reject(err) : resolve()
-        );
-    }));
-
-    Promise.all(queries)
-        .then(() => {
-            registrarAuditoria('configuracion', 0, 'actualizar', req.usuario.nombre, null, config);
-            res.json({ success: true });
-        })
-        .catch(err => res.status(500).json(err));
+    const datos = req.body;
+    db.query('SELECT id FROM configuracion LIMIT 1', (err, results) => {
+        if (err) return res.status(500).json(err);
+        if (results.length === 0) {
+            db.query('INSERT INTO configuracion SET ?', [datos], (err2) => {
+                if (err2) return res.status(500).json(err2);
+                registrarAuditoria('configuracion', 1, 'crear', req.usuario.nombre, null, datos);
+                res.json({ success: true });
+            });
+        } else {
+            const idConfig = results[0].id;
+            db.query('UPDATE configuracion SET ? WHERE id = ?', [datos, idConfig], (err2) => {
+                if (err2) return res.status(500).json(err2);
+                registrarAuditoria('configuracion', idConfig, 'actualizar', req.usuario.nombre, null, datos);
+                res.json({ success: true });
+            });
+        }
+    });
 });
 
 // ============================================================
-// === MANEJO DE ERRORES ===
+// === MANEJO DE ERRORES Y ARRANQUE ===
 // ============================================================
 app.use((err, req, res, next) => {
     console.error('❌ Error:', err.message);
     res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-app.listen(3000, () => {
-    console.log('🚀 Servidor seguro en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor seguro en puerto ${PORT}`);
     console.log('🔒 JWT + bcrypt + rate limiting activados');
 });
