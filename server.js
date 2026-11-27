@@ -14,6 +14,7 @@ const compression = require('compression');
 require('dotenv').config();
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Configuración de Helmet para permitir imágenes y CDNs externos
 app.use(helmet({
@@ -36,6 +37,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
     console.error('❌ ERROR CRÍTICO: JWT_SECRET no está configurado en el entorno o .env');
     console.error('   Ejecuta: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"');
+    console.error('   Y pega el resultado en el archivo .env como JWT_SECRET=...');
     process.exit(1);
 }
 const JWT_EXPIRES = '7d';
